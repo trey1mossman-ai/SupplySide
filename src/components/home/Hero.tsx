@@ -12,7 +12,7 @@ export default function Hero() {
     serviceType: ''
   });
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
-  const imageVersion = '2025-01-06'; // Fixed version to prevent regeneration
+  const imageVersion = Date.now(); // Force cache refresh
 
   const [rotatingText, setRotatingText] = useState(0);
   const rotatingWords = ['EXPERIENCED', 'PROFESSIONAL', 'COURTEOUS', 'TRANSPARENT', 'THOROUGH', 'SKILLED'];
@@ -22,10 +22,17 @@ export default function Hero() {
       setRotatingText((prev) => (prev + 1) % rotatingWords.length);
     }, 2500);
     
-    // Preload hero image with fixed version
+    // Preload hero image with cache bust
     const img = new Image();
     img.src = `/images/hero/homepage-hero.webp?v=${imageVersion}`;
-    img.onload = () => setHeroImageLoaded(true);
+    img.onload = () => {
+      console.log('Hero image loaded successfully from:', img.src);
+      setHeroImageLoaded(true);
+    };
+    img.onerror = () => {
+      console.error('Failed to load hero image from:', img.src);
+      setHeroImageLoaded(true); // Still show content even if image fails
+    };
     
     return () => clearInterval(interval);
   }, []);
