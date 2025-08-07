@@ -11,8 +11,7 @@ export default function Hero() {
     zipCode: '',
     serviceType: ''
   });
-  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
-  const imageVersion = Date.now(); // Force cache refresh
+  const imageVersion = '2025-01-08-v2'; // Fixed version for stability
 
   const [rotatingText, setRotatingText] = useState(0);
   const rotatingWords = ['EXPERIENCED', 'PROFESSIONAL', 'COURTEOUS', 'TRANSPARENT', 'THOROUGH', 'SKILLED'];
@@ -22,17 +21,10 @@ export default function Hero() {
       setRotatingText((prev) => (prev + 1) % rotatingWords.length);
     }, 2500);
     
-    // Preload hero image with cache bust
+    // Preload hero image with fixed version
     const img = new Image();
     img.src = `/images/hero/homepage-hero.webp?v=${imageVersion}`;
-    img.onload = () => {
-      console.log('Hero image loaded successfully from:', img.src);
-      setHeroImageLoaded(true);
-    };
-    img.onerror = () => {
-      console.error('Failed to load hero image from:', img.src);
-      setHeroImageLoaded(true); // Still show content even if image fails
-    };
+    // Preload in background for better performance
     
     return () => clearInterval(interval);
   }, []);
@@ -53,7 +45,7 @@ export default function Hero() {
   return (
     <section 
       id="hero"
-      className={`bg-soft-beige py-24 md:py-32 relative transition-opacity duration-700 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+      className="bg-soft-beige py-24 md:py-32 relative"
       style={{
         backgroundImage: `url(/images/hero/homepage-hero.webp?v=${imageVersion})`,
         backgroundSize: 'cover',
