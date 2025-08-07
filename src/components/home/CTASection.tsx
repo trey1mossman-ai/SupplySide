@@ -40,8 +40,8 @@ export default function CTASection() {
               <span>Licensed & Insured</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-burnt-sienna font-bold">48</span>
-              <span>Years Lead Installer Experience</span>
+              <span className="text-burnt-sienna font-bold">80+</span>
+              <span>Years Combined Experience</span>
             </div>
           </div>
         </div>
