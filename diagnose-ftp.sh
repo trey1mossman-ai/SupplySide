@@ -16,7 +16,7 @@ echo ""
 lftp << EOF
 set ssl:verify-certificate no
 set ftp:ssl-allow no
-open ftp://u921052894.SupplySide@185.212.71.198:21
+open ftp://u921052894.mediumblue-chamois-837591.hostingersite.com@185.212.71.198:21
 echo "Current directory:"
 pwd
 echo ""

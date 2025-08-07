@@ -29,7 +29,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 185.212.71.198
-          username: u921052894.SupplySide
+          username: u921052894.mediumblue-chamois-837591.hostingersite.com
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           port: 21
@@ -55,7 +55,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 185.212.71.198
-          username: u921052894.SupplySide
+          username: u921052894.mediumblue-chamois-837591.hostingersite.com
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           port: 21
@@ -81,7 +81,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 185.212.71.198
-          username: u921052894.SupplySide
+          username: u921052894.mediumblue-chamois-837591.hostingersite.com
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           port: 21
