@@ -1,0 +1,80 @@
+name: Deploy to Primary and Backup Hostinger
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: "deploy-prod"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite site
+        run: npm run build
+
+      - name: Verify hero image exists
+        run: |
+          echo "Checking hero image..."
+          ls -lh dist/images/hero/
+          echo "Total dist size:"
+          du -sh dist/
+
+      # Deploy to Primary Hostinger
+      - name: Deploy to Primary Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT || 21 }}
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: ftp-deploy-sync-state-primary.json
+          log-level: verbose
+
+      # Deploy to Backup Hostinger (only if primary succeeded)
+      - name: Deploy to Backup Hostinger
+        if: success() && secrets.FTP_SERVER_BACKUP != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER_BACKUP }}
+          username: ${{ secrets.FTP_USERNAME_BACKUP }}
+          password: ${{ secrets.FTP_PASSWORD_BACKUP }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT_BACKUP || 21 }}
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: ftp-deploy-sync-state-backup.json
+          log-level: minimal
+          
+      # Verify both deployments
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "=== Deployment Summary ==="
+          echo "Primary Site: ${{ job.status }}"
+          if [ -n "${{ secrets.FTP_SERVER_BACKUP }}" ]; then
+            echo "Backup Site: Deployed"
+          fi
+          echo "Time: $(date)"
+          echo "========================="

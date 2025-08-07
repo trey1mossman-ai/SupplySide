@@ -1,0 +1,76 @@
+name: Deploy to Both Hostinger Accounts
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: "deploy-prod"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite site
+        run: npm run build
+
+      - name: Verify build
+        run: |
+          echo "Build completed at $(date)"
+          echo "Total dist size: $(du -sh dist/)"
+
+      # Deploy to NEW Primary Hostinger (supplysideflooringinstallation.com)
+      - name: Deploy to Primary Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: ftp-deploy-sync-state-primary.json
+          log-level: minimal
+
+      # Deploy to OLD Backup Hostinger (mediumblue-chamois)
+      - name: Deploy to Backup Hostinger
+        if: success()
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 185.212.71.198
+          username: u921052894.SupplySide
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: ftp-deploy-sync-state-backup.json
+          log-level: minimal
+          
+      # Verify both deployments
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "=== Deployment Complete ==="
+          echo "Primary: https://supplysideflooringinstallation.com"
+          echo "Backup: https://mediumblue-chamois-837591.hostingersite.com"
+          echo "Time: $(date)"
+          echo "=========================="

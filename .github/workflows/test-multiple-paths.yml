@@ -1,0 +1,113 @@
+name: Test Multiple FTP Paths
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  test-paths:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Build site
+        run: |
+          npm ci
+          npm run build
+          echo "Files in dist:"
+          ls -la dist/
+      
+      - name: Try Path 1 - domains/subdomain/public_html
+        id: path1
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 185.212.71.198
+          username: u921052894.SupplySide
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./dist/
+          server-dir: domains/mediumblue-chamois-837591.hostingersite.com/public_html/
+          state-name: .ftp-test-path1.json
+          log-level: verbose
+          timeout: 30000
+      
+      - name: Path 1 Result
+        if: always()
+        run: |
+          if [ "${{ steps.path1.outcome }}" == "success" ]; then
+            echo "✅ PATH 1 WORKED: domains/mediumblue-chamois-837591.hostingersite.com/public_html/"
+          else
+            echo "❌ Path 1 failed"
+          fi
+      
+      - name: Try Path 2 - just public_html
+        if: steps.path1.outcome != 'success'
+        id: path2
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 185.212.71.198
+          username: u921052894.SupplySide
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./dist/
+          server-dir: public_html/
+          state-name: .ftp-test-path2.json
+          log-level: verbose
+          timeout: 30000
+      
+      - name: Path 2 Result
+        if: steps.path1.outcome != 'success'
+        run: |
+          if [ "${{ steps.path2.outcome }}" == "success" ]; then
+            echo "✅ PATH 2 WORKED: public_html/"
+          else
+            echo "❌ Path 2 failed"
+          fi
+      
+      - name: Try Path 3 - root directory
+        if: steps.path1.outcome != 'success' && steps.path2.outcome != 'success'
+        id: path3
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 185.212.71.198
+          username: u921052894.SupplySide
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: .ftp-test-path3.json
+          log-level: verbose
+          timeout: 30000
+      
+      - name: Path 3 Result
+        if: steps.path1.outcome != 'success' && steps.path2.outcome != 'success'
+        run: |
+          if [ "${{ steps.path3.outcome }}" == "success" ]; then
+            echo "✅ PATH 3 WORKED: ./ (root)"
+          else
+            echo "❌ Path 3 failed"
+          fi
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "========================================="
+          echo "FTP PATH TEST RESULTS:"
+          echo "========================================="
+          echo "Path 1 (domains/subdomain/public_html): ${{ steps.path1.outcome }}"
+          echo "Path 2 (public_html): ${{ steps.path2.outcome || 'skipped' }}"
+          echo "Path 3 (root): ${{ steps.path3.outcome || 'skipped' }}"
+          echo "========================================="
+          echo "Check https://mediumblue-chamois-837591.hostingersite.com to see if deployment worked"

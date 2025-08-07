@@ -1,0 +1,104 @@
+name: Deploy to Hostinger (Enhanced)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: "deploy-prod"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite site
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          echo "Checking hero image..."
+          ls -lh dist/images/hero/ || echo "Hero images directory not found"
+          echo "Total dist size:"
+          du -sh dist/
+          echo "Build timestamp:"
+          date
+
+      # Primary Deployment
+      - name: Deploy to Primary Hostinger
+        id: deploy-primary
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT || 21 }}
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: ftp-deploy-sync-state.json
+          log-level: verbose
+
+      # Optional: Deploy to Backup/Mirror Site
+      # Uncomment and configure when ready
+      # - name: Deploy to Backup Hostinger
+      #   if: success() && vars.ENABLE_BACKUP_DEPLOY == 'true'
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER_BACKUP }}
+      #     username: ${{ secrets.FTP_USERNAME_BACKUP }}
+      #     password: ${{ secrets.FTP_PASSWORD_BACKUP }}
+      #     protocol: ftps
+      #     port: 21
+      #     local-dir: ./dist/
+      #     server-dir: ./
+      #     state-name: ftp-deploy-sync-state-backup.json
+      #     log-level: minimal
+
+      # Deployment Verification
+      - name: Verify Primary Deployment
+        if: success()
+        run: |
+          echo "Waiting for deployment to propagate..."
+          sleep 30
+          
+          # Check if site is responding
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://supplysideflooringinstallation.com || echo "000")
+          
+          if [ "$response" = "200" ]; then
+            echo "✅ Primary site is live and responding!"
+          else
+            echo "⚠️ Primary site returned HTTP $response"
+            echo "This might be normal if DNS is still propagating"
+          fi
+          
+          # Save deployment info
+          echo "Deployment completed at $(date)" > deployment-info.txt
+          echo "Git SHA: ${{ github.sha }}" >> deployment-info.txt
+          echo "Triggered by: ${{ github.actor }}" >> deployment-info.txt
+
+      # Optional: Notify on failure
+      - name: Deployment Status
+        if: always()
+        run: |
+          if [ "${{ steps.deploy-primary.outcome }}" = "success" ]; then
+            echo "🎉 Deployment successful!"
+          else
+            echo "❌ Deployment failed - check logs above"
+          fi

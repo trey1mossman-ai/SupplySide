@@ -1,0 +1,53 @@
+name: Deploy to OLD Hostinger (Fixed Path)
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    branches:
+      - preview-deploy  # Optional: auto-deploy on preview-deploy branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build site
+        run: |
+          echo "Building website..."
+          npm run build
+          echo "Build complete. Listing dist contents:"
+          ls -la dist/
+          echo "Total size of dist:"
+          du -sh dist/
+      
+      - name: Deploy to OLD Hostinger with correct path
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 185.212.71.198
+          username: u921052894.SupplySide
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp  # Using regular FTP as ftps had issues
+          port: 21
+          local-dir: ./dist/
+          server-dir: domains/mediumblue-chamois-837591.hostingersite.com/public_html/
+          state-name: .ftp-deploy-old-hostinger-state.json
+          log-level: verbose
+          dangerous-clean-slate: false  # Set to true if you want to clear existing files first
+      
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "Preview URL: https://mediumblue-chamois-837591.hostingersite.com"
+          echo "Files deployed to: domains/mediumblue-chamois-837591.hostingersite.com/public_html/"

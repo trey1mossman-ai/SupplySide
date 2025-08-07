@@ -1,0 +1,60 @@
+name: Deploy with Correct Path
+
+on:
+  workflow_dispatch:
+    inputs:
+      server_dir:
+        description: 'Server directory path'
+        required: true
+        default: './domains/mediumblue-chamois-837591.hostingersite.com/public_html/'
+        type: choice
+        options:
+          - './domains/mediumblue-chamois-837591.hostingersite.com/public_html/'
+          - './public_html/'
+          - '/home/u921052894/domains/mediumblue-chamois-837591.hostingersite.com/public_html/'
+          - './'
+          - 'domains/mediumblue-chamois-837591.hostingersite.com/public_html/'
+
+jobs:
+  deploy-with-path:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+          
+      - name: List build output
+        run: |
+          echo "=== Build output ==="
+          ls -la dist/
+          echo "=== Checking index.html ==="
+          head -5 dist/index.html
+          
+      - name: Deploy to OLD Hostinger with path ${{ inputs.server_dir }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 185.212.71.198
+          username: u921052894.SupplySide
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ${{ inputs.server_dir }}
+          state-name: ftp-deploy-debug.json
+          log-level: verbose
+          
+      - name: Verify deployment
+        run: |
+          echo "Files should now be at:"
+          echo "https://mediumblue-chamois-837591.hostingersite.com"
+          echo ""
+          echo "Deployed to directory: ${{ inputs.server_dir }}"
+          echo ""
+          echo "If still 404, try a different path option"
