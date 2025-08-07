@@ -3,41 +3,72 @@ import { useState } from 'react';
 import { Plus, Minus, Phone } from 'lucide-react';
 import { companyInfo } from '../data/company';
 
-// Placeholder FAQs - to be replaced with the new ones user will provide
-const faqs = [
+// Comprehensive FAQ data organized by flooring type
+const faqSections = [
   {
-    question: 'How does your free consultation work?',
-    answer: 'We\'ll schedule a convenient time to visit your home, measure your space, show flooring samples, and provide a detailed quote on the spot. The consultation typically takes 30-45 minutes, and there\'s absolutely no obligation.'
+    title: "Vinyl Flooring Installation FAQs",
+    faqs: [
+      { question: "Will Chicago winter salt damage luxury vinyl plank flooring?", answer: "Luxury vinyl plank (LVP) flooring is built with a chemical-resistant wear layer, so Chicago's snow-melt salt won't stain or pit it. Mop up residue promptly and the surface stays clear." },
+      { question: "Does luxury vinyl fade in sunny Chicago high-rises?", answer: "Top-tier LVP/LVT products carry UV-resistance warranties. Pair them with low-E window film and fading is virtually eliminated—perfect for those south-facing Lake-view condos." },
+      { question: "Is luxury vinyl flooring approved by most Chicago HOAs?", answer: "Yes. We provide Impact Insulation Class (IIC) and Sound Transmission ratings that satisfy typical Chicago condo bylaws." },
+      { question: "Can you install vinyl plank over a basement slab after flooding?", answer: "Once slab moisture tests below 3 lbs/1,000 sq ft/24 h we lay a 6-mil vapor barrier and float waterproof LVP—ideal for Chicago basements." },
+      { question: "Is LVP safe for kids and pets?", answer: "We only install FloorScore® or GREENGUARD Gold vinyl that emits < 0.5 mg/m³ VOCs, making it child- and pet-friendly." }
+    ]
   },
   {
-    question: 'What makes SupplySide different?',
-    answer: 'Family-owned for over 80 years combined experience, we\'re not a big box store. Matt and Don personally oversee every project. We show up on time, protect your home, and guarantee our work for 5 years.'
+    title: "Tile Flooring Installation FAQs", 
+    faqs: [
+      { question: "What porcelain tile stands up to Chicago freeze-thaw on patios?", answer: "Choose porcelain rated < 0.5% water absorption; it is frost-proof and won't crack during Chicagoland winters." },
+      { question: "Can you tile over 100-year-old pine subfloors?", answer: "Yes—after stiffening with ½″ cement board or an uncoupling membrane to meet L/360 deflection codes." },
+      { question: "Which grout color hides Chicago slush stains?", answer: "Mid-tone greys disguise salt residue and road grime while still looking modern." },
+      { question: "Does large-format tile need a flatter floor?", answer: "Absolutely. We laser-level and use leveling clips; the payoff is fewer grout lines and a sleek look." },
+      { question: "Are epoxy grouts worth it?", answer: "For Chicago kitchens and showers, epoxy grout is stain-proof and never needs sealing—ideal for busy homeowners." }
+    ]
   },
   {
-    question: 'How long will my installation take?',
-    answer: 'Most installations are completed in 1-3 days. We\'ll give you an exact timeline during your consultation. We work efficiently while maintaining precision, and we\'ll never leave your home unfinished overnight.'
+    title: "Hardwood Flooring Installation FAQs",
+    faqs: [
+      { question: "How long should hardwood acclimate in a Chicago home?", answer: "48–72 hours at 30–50% relative humidity; this minimizes seasonal gapping." },
+      { question: "Do whole-home humidifiers prevent winter plank shrinkage?", answer: "Yes—keeping RH above 30% stops ⅛″ gaps from forming." },
+      { question: "Can engineered hardwood go over radiant-heat concrete?", answer: "Engineered planks rated for radiant heat perform well; we glue-assist for added stability." },
+      { question: "Will road salt damage polyurethane finishes?", answer: "Polyurethane resists salt, but entry mats and quick wipe-ups preserve gloss." },
+      { question: "Are 8-inch wide planks stable in Chicago humidity?", answer: "Yes—if engineered; solid woods should stay at 5″ or narrower." }
+    ]
   },
   {
-    question: 'Do you handle everything?',
-    answer: 'Yes! We move furniture, remove old flooring, handle disposal, and clean up completely. You literally don\'t have to do anything except choose your new floors and let us handle the rest.'
+    title: "Laminate Flooring Installation FAQs",
+    faqs: [
+      { question: "Does laminate need acclimation like hardwood?", answer: "Yes—48 hours in the space prevents peaked joints." },
+      { question: "Will laminate buckle in Chicago's summer humidity?", answer: "Not with ⅜″ expansion gaps and T-molds at doorways." },
+      { question: "Can laminate go in kitchens?", answer: "With water-resistant cores and sealed edges, it handles splashes—just wipe up puddles." },
+      { question: "How scratch-resistant is laminate versus vinyl?", answer: "AC4/AC5 laminates shrug off chair legs better than typical 12-mil vinyl." },
+      { question: "What underlayment reduces footfall noise in two-story homes?", answer: "3 mm cork or rubber pad drops airborne noise 18–20 dB." }
+    ]
   },
   {
-    question: 'What if I need to reschedule?',
-    answer: 'Life happens! We\'re flexible with scheduling and understand plans change. Just give us 24 hours notice and we\'ll work with you to find a new date that fits your schedule.'
+    title: "Carpet Installation FAQs", 
+    faqs: [
+      { question: "What carpet pad warms Chicago basements best?", answer: "An 8-lb, 7/16″ memory-foam pad insulates cold concrete and feels plush." },
+      { question: "How does carpet handle winter salt at entryways?", answer: "Solution-dyed nylon resists staining; we apply a fiber-shield in high-traffic zones." },
+      { question: "Which carpet style deadens noise in multi-unit buildings?", answer: "Dense Berber loops plus acoustic pad can cut footfall up to 30 dB." },
+      { question: "Is recycled PET carpet durable?", answer: "Modern PET fibers resist crushing and keep plastic bottles out of landfills—a sustainable choice." },
+      { question: "Can you fabricate custom-sized area rugs from broadloom?", answer: "Absolutely—we bind edges to create perfectly sized rugs for hardwood protection." }
+    ]
   },
   {
-    question: 'How do I prepare for installation day?',
-    answer: 'We\'ll provide a simple checklist during your consultation, but honestly, we handle most everything. Just remove small valuables and ensure we have clear pathways. We\'ll take care of the rest.'
-  },
-  {
-    question: 'What happens after installation?',
-    answer: 'We\'ll walk through everything with you, ensure you\'re 100% satisfied, and provide care instructions. You\'ll have our direct number for any questions. Plus, our commitment to expert craftsmanship means we\'re always here if you need us.'
-  },
-  {
-    question: 'Why should I trust SupplySide with my home?',
-    answer: 'We\'re licensed, insured, and have installed flooring in over 1,000 Chicago homes. We treat every home like it\'s our own. Check our reviews - our customers become friends who recommend us to their neighbors.'
+    title: "Hardwood Refinishing FAQs",
+    faqs: [
+      { question: "What's the best season to refinish hardwood floors in Chicago?", answer: "Spring or fall offer stable humidity, minimizing post-refinish gaps." },
+      { question: "Do I need to clear out every piece of furniture?", answer: "Yes—refinishers need a bare floor; we can arrange pods or movers if needed." },
+      { question: "How long before pets can walk on newly finished floors?", answer: "24 h for water-based polyurethane; 48–72 h for oil-based." },
+      { question: "Can you remove deep pet-urine stains?", answer: "Up to 90% via oxalic-acid bleach; severe spots may need board replacement." },
+      { question: "What sheen is most popular in Chicago homes?", answer: "Satin—modern look, hides scratches better than semi-gloss." }
+    ]
   }
 ];
+
+// Flatten all FAQs for the main display
+const faqs = faqSections.flatMap(section => section.faqs);
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -54,6 +85,20 @@ export default function FAQ() {
           name="description" 
           content="Get answers to common questions about flooring installation in Chicago. Learn about our process, pricing, timeline, and guarantees. Call 312-210-0606 for more info." 
         />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(faq => ({
+              "@type": "Question",
+              "name": faq.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+              }
+            }))
+          })}
+        </script>
       </Helmet>
 
       {/* Hero Section */}
