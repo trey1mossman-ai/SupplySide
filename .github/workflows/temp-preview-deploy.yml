@@ -37,6 +37,6 @@ jobs:
           protocol: ftp  # Using regular FTP
           port: 21
           local-dir: ./dist/
-          server-dir: public_html/
+          server-dir: domains/mediumblue-chamois-837591.hostingersite.com/public_html/
           log-level: verbose
           state-name: ftp-preview-deploy-state.json

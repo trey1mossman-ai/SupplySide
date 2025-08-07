@@ -29,6 +29,6 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./dist/
-          server-dir: ./public_html/  # This should work with full username
+          server-dir: domains/mediumblue-chamois-837591.hostingersite.com/public_html/
           state-name: ftp-deploy-old.json
           log-level: verbose
