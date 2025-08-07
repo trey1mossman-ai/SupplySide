@@ -11,7 +11,7 @@ export default function Hero() {
     zipCode: '',
     serviceType: ''
   });
-  const imageVersion = '2025-01-08-v2'; // Fixed version for stability
+  const imageVersion = '2025-01-08-v3'; // Force cache refresh for new image
 
   const [rotatingText, setRotatingText] = useState(0);
   const rotatingWords = ['EXPERIENCED', 'PROFESSIONAL', 'COURTEOUS', 'TRANSPARENT', 'THOROUGH', 'SKILLED'];
