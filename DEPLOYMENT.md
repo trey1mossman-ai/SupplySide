@@ -26,24 +26,21 @@ npm run deploy:discover
 ## 🔧 Hostinger Configuration
 
 ### Hosting Details
-- **Website URL**: https://mediumblue-chamois-837591.hostingersite.com
-- **Server IP**: 185.212.71.198
-- **Server Name**: server648
+- **Website URL**: https://supplysideflooringinstallation.com
+- **Server IP**: 194.195.84.247
+- **Server Name**: [Check in Hostinger hPanel]
 - **Server Location**: North America (USA AZ)
 
 ### FTP Access Points
-- **Primary FTP IP**: 185.212.71.198
-- **FTP Hostname**: ftp://mediumblue-chamois-837591.hostingersite.com
+- **Primary FTP IP**: 194.195.84.247
+- **FTP Hostname**: ftp://194.195.84.247
 - **FTP Port**: 21
 - **SFTP Port**: 65002 (Premium plans only)
 
 ### Directory Structure
 ```
-When using username: u921052894.SupplySide
-→ Connects directly to: /public_html
-
-When using username: u921052894.mediumblue-chamois-837591.hostingersite.com
-→ Connects to: /home/u921052894/domains/mediumblue-chamois-837591.hostingersite.com/public_html
+When using username: u282071750.SupplySide
+→ Connects to: /home/u282071750/domains/supplysideflooringinstallation.com/public_html
 ```
 
 ## 🔑 FTP Credentials
@@ -53,13 +50,13 @@ Create a `.env` file with:
 
 ```env
 # Hostinger FTP Configuration
-FTP_HOST=185.212.71.198
+FTP_HOST=194.195.84.247
 FTP_PORT=21
-FTP_USER=u921052894.SupplySide
+FTP_USER=u282071750.SupplySide
 FTP_PASS=your_ftp_password_here
 
 # Deployment Settings
-REMOTE_PATH=/public_html
+REMOTE_PATH=./
 LOCAL_PATH=./
 DEPLOYMENT_MODE=production
 ```
