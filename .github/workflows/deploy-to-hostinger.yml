@@ -33,23 +33,25 @@ jobs:
 
       - name: Verify build output
         run: |
-          echo "Build completed. Checking output..."
+          echo "📦 Build completed. Checking output..."
+          echo "Contents of dist folder:"
           ls -la dist/
+          echo "---"
+          echo "Total files in dist:"
+          find dist -type f | wc -l
+          echo "---"
+          echo "Total dist size:"
           du -sh dist/
 
-      - name: Clean state file
+      - name: Clean ALL state files (FORCE fresh upload)
         run: |
-          rm -f .ftp-deploy-sync-state.json || true
-          rm -f ./dist/.ftp-deploy-sync-state.json || true
-
-      - name: Debug FTP Connection Info
-        run: |
-          echo "Attempting FTP connection to:"
-          echo "Server: ${{ secrets.FTP_SERVER }}"
-          echo "Username: ${{ secrets.FTP_USERNAME }}"
-          echo "Port: 21"
-          echo "Protocol: ftps"
-          echo "Target directory: public_html/"
+          echo "🧹 Cleaning state files to force upload..."
+          rm -f .ftp-deploy-sync-state.json
+          rm -f ./dist/.ftp-deploy-sync-state.json
+          rm -f ./.ftp-deploy-sync-state.json
+          # Remove any state files that might exist
+          find . -name "*ftp-deploy-sync*" -delete
+          echo "State files cleaned"
 
       - name: Deploy to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -60,7 +62,20 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./dist/
-          server-dir: public_html/
+          server-dir: /domains/supplysideflooringinstallation.com/public_html/
           state-name: .ftp-deploy-sync-state.json
           log-level: verbose
-          dangerous-clean-slate: true
+          dangerous-clean-slate: true  # FORCE upload all files
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+
+      - name: Verify Deployment
+        if: always()
+        run: |
+          echo "🔍 Deployment attempt completed"
+          echo "Check the logs above for:"
+          echo "1. Number of files uploaded"
+          echo "2. Any error messages"
+          echo "3. Final upload directory"
