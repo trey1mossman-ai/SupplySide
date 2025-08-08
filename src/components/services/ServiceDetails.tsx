@@ -3,9 +3,10 @@ import { serviceDescriptions } from '../../data/serviceDescriptions';
 
 interface ServiceDetailsProps {
   service: Service;
+  onOpenModal?: () => void;
 }
 
-export default function ServiceDetails({ service }: ServiceDetailsProps) {
+export default function ServiceDetails({ service, onOpenModal }: ServiceDetailsProps) {
   const descriptions = serviceDescriptions[service.id];
   return (
     <section className="py-24 md:py-32 bg-soft-taupe">
@@ -61,12 +62,12 @@ export default function ServiceDetails({ service }: ServiceDetailsProps) {
           </div>
           
           <div className="text-center">
-            <a
-              href="#service-form"
+            <button
+              onClick={onOpenModal || (() => window.location.href = '#service-form')}
               className="inline-block bg-burnt-sienna text-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-opacity-90 transition-all duration-300"
             >
               Get Free Estimate
-            </a>
+            </button>
           </div>
         </div>
       </div>

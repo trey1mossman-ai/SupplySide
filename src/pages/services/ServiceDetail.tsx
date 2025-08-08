@@ -295,7 +295,7 @@ export default function ServiceDetail() {
       </section>
 
       {/* Service Details Section */}
-      <ServiceDetails service={service} />
+      <ServiceDetails service={service} onOpenModal={() => setIsModalOpen(true)} />
 
       {/* Why Choose Section */}
       <section className="py-24 md:py-32 bg-light-gray">
@@ -369,12 +369,12 @@ export default function ServiceDetail() {
                   </li>
                 ))}
               </ul>
-              <a
-                href="#service-form"
+              <button
+                onClick={() => setIsModalOpen(true)}
                 className="bg-burnt-sienna text-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-opacity-90 transition-all duration-300 inline-block"
               >
                 Get Free Estimate
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -400,12 +400,12 @@ export default function ServiceDetail() {
             Join thousands of satisfied Chicago homeowners who trust SupplySide for their flooring needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#service-form"
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="bg-burnt-sienna text-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-opacity-90 transition-all duration-300 inline-flex items-center justify-center"
             >
               Get Free Estimate
-            </a>
+            </button>
             <a
               href={`tel:${companyInfo.phone}`}
               className="bg-transparent border-2 border-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-crisp-white hover:text-deep-charcoal transition-all duration-300 inline-flex items-center justify-center gap-2"
