@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Service } from '../../data/services';
 import LazyImage from './LazyImage';
 
@@ -34,15 +34,24 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ service, onOpenModal }: ServiceCardProps) {
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  
+  const handleCardClick = () => {
+    navigate(service.url);
+  };
+
+  const handleEstimateClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (onOpenModal) {
       onOpenModal();
     }
   };
 
   return (
-    <div className="block group service-card transition-all duration-300 hover:-translate-y-1">
+    <div 
+      className="block group service-card transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="bg-crisp-white rounded-2xl shadow-sm hover:shadow-xl h-full overflow-hidden flex flex-col">
         <div className="h-64 md:h-72 overflow-hidden relative">
           <LazyImage 
@@ -53,11 +62,9 @@ export default function ServiceCard({ service, onOpenModal }: ServiceCardProps) 
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
         <div className="p-6 flex flex-col flex-grow">
-          <Link to={service.url}>
-            <h3 className="text-xl font-inter font-medium mb-3 text-deep-charcoal hover:text-burnt-sienna transition-colors duration-300">
-              {service.name}
-            </h3>
-          </Link>
+          <h3 className="text-xl font-inter font-medium mb-3 text-deep-charcoal hover:text-burnt-sienna transition-colors duration-300">
+            {service.name}
+          </h3>
           <p className="text-sm text-medium-gray mb-4 font-light leading-relaxed line-clamp-2">
             {service.description}
           </p>
@@ -69,7 +76,7 @@ export default function ServiceCard({ service, onOpenModal }: ServiceCardProps) 
             ))}
           </div>
           <button 
-            onClick={handleClick}
+            onClick={handleEstimateClick}
             className="w-full bg-burnt-sienna text-crisp-white py-2.5 px-6 rounded-md font-inter font-medium text-base hover:bg-opacity-90 transition-all duration-300 mt-auto">
             Get Free Estimate
           </button>
