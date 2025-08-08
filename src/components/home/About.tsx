@@ -23,9 +23,9 @@ export default function About() {
                 Chicago's Most Reliable Flooring Installers
               </h3>
               <p className="text-gray-300 mb-6 font-light leading-relaxed">
-                With 80+ years combined experience, Matt and Don have been transforming Chicago homes and businesses 
-                with quality flooring installations. Don brings 48 years as lead installer. As a family-owned and operated business, 
-                we treat every project like it's our own home.
+                With 80+ years combined experience, our team has been transforming Chicago homes and businesses 
+                with quality flooring installations. Don brings 48 years of expertise as our lead installer. As a family-owned business 
+                operated by Matt, we treat every project like it's our own home.
               </p>
               <p className="text-gray-300 mb-6 font-light leading-relaxed">
                 We've built our reputation on three simple principles: show up on time, do what we say 
@@ -33,9 +33,9 @@ export default function About() {
                 homeowners consistently choose SupplySide for their flooring needs.
               </p>
               <div className="mt-8 p-4 bg-crisp-white/10 rounded-lg border border-crisp-white/20">
-                <p className="text-crisp-white font-medium text-lg">Matt & Don</p>
-                <p className="text-gray-300">Founders & Master Installers</p>
-                <p className="text-sm text-gray-400 mt-2">Family-owned • Licensed & Insured</p>
+                <p className="text-crisp-white font-medium text-lg">Matt Mossman</p>
+                <p className="text-gray-300">Owner & Operator</p>
+                <p className="text-sm text-gray-400 mt-2">Don - Lead Installer (48 years experience) • Family-owned • Licensed & Insured</p>
               </div>
             </div>
             
