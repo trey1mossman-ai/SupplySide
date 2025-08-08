@@ -32,11 +32,6 @@ export default function About() {
                 customer as if they are part of our own family - by providing top-notch craftsmanship, with white-glove customer service. We look forward 
                 to the opportunity to treat your family or business like our own!
               </p>
-              <div className="mt-8 p-4 bg-crisp-white/10 rounded-lg border border-crisp-white/20">
-                <p className="text-crisp-white font-medium text-lg">Don Henke</p>
-                <p className="text-gray-300">Chief Installer</p>
-                <p className="text-sm text-gray-400 mt-2">Nearly 50 years experience • Family-owned • Licensed & Insured</p>
-              </div>
             </div>
             
             <div className="grid grid-cols-2 gap-8">
