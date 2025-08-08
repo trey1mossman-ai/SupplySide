@@ -54,4 +54,4 @@ jobs:
           server-dir: public_html/
           state-name: .ftp-deploy-sync-state.json
           log-level: verbose
-          dangerous-clean-slate: true
+          dangerous-clean-slate: true# Triggering deployment with updated credentials
