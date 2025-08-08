@@ -37,11 +37,16 @@ jobs:
           ls -la dist/
           du -sh dist/
 
+      - name: Clean state file
+        run: |
+          rm -f .ftp-deploy-sync-state.json || true
+          rm -f ./dist/.ftp-deploy-sync-state.json || true
+
       - name: Deploy to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: "194.195.84.247"
-          username: "u282071750.SupplySide"
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
