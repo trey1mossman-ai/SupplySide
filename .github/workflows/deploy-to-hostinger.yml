@@ -35,41 +35,18 @@ jobs:
         run: |
           echo "Build completed. Checking output..."
           ls -la dist/
-          echo "Total dist size:"
           du -sh dist/
-
-      - name: Clean FTP state file (prevent corruption)
-        run: |
-          rm -f .ftp-deploy-sync-state.json || true
-          echo "State file cleaned to prevent deployment issues"
 
       - name: Deploy to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          server: "194.195.84.247"
+          username: "u282071750.SupplySide"
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps  # SECURE FTP REQUIRED
+          protocol: ftps
           port: 21
           local-dir: ./dist/
-          server-dir: public_html/  # Hostinger expects this directory
+          server-dir: public_html/
           state-name: .ftp-deploy-sync-state.json
           log-level: verbose
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.env
-            **/.env.*
-
-      - name: Deployment Status
-        if: always()
-        run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "🎉 Deployment successful!"
-            echo "Site should be live at: https://supplysideflooringinstallation.com"
-            echo "Remember to clear Hostinger cache in hPanel!"
-          else
-            echo "❌ Deployment failed - check logs above"
-          fi
+          dangerous-clean-slate: true
