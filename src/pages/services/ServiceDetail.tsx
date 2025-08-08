@@ -7,8 +7,11 @@ import { companyInfo } from '../../data/company';
 import { getServiceFAQs } from '../../data/faqs';
 import FAQAccordion from '../../components/common/FAQAccordion';
 import ServiceDetails from '../../components/services/ServiceDetails';
+import EstimateModal from '../../components/common/EstimateModal';
+import { submitFormToWebhook } from '../../utils/submitForm';
 
 export default function ServiceDetail() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { slug } = useParams();
   const location = window.location.pathname.slice(1); // Remove leading slash
   
@@ -70,10 +73,30 @@ export default function ServiceDetail() {
     return <Navigate to="/" replace />;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you! We\'ll contact you within 24 hours with your free quote.');
+    
+    // Use the service ID as serviceType if not specified
+    const dataToSubmit = {
+      ...formData,
+      serviceType: formData.serviceType || service?.id || ''
+    };
+    
+    const success = await submitFormToWebhook(dataToSubmit, 'service-page-form');
+    
+    if (success) {
+      alert('Thank you! We\'ll contact you within 24 hours with your free quote.');
+      // Reset form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        zipCode: '',
+        serviceType: service?.id || ''
+      });
+    } else {
+      alert('There was an error submitting your request. Please try again or call us directly.');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -95,7 +118,7 @@ export default function ServiceDetail() {
   // Fallback FAQs if service doesn't have specific ones
   const defaultFaqs = [
     { 
-      question: `How long does ${service.name.toLowerCase()} installation take?`, 
+      question: `How long does ${service.name.toLowerCase()}${!service.name.toLowerCase().includes('installation') ? ' installation' : ''} take?`, 
       answer: 'Most installations are completed in 1-3 days depending on the project size and complexity. We\'ll provide a detailed timeline during your free consultation.' 
     },
     { 
@@ -103,8 +126,8 @@ export default function ServiceDetail() {
       answer: `Our flooring experts will assess your specific needs during a free consultation to ensure ${service.name.toLowerCase()} is the perfect choice for your space and lifestyle.` 
     },
     { 
-      question: 'Do you move furniture?', 
-      answer: 'Yes, we offer professional furniture moving services as part of our comprehensive installation package to ensure a smooth, hassle-free experience.' 
+      question: 'Do I need to clear furniture before installation?', 
+      answer: 'While our expertise is in professional flooring installation, we understand furniture can be challenging to move. Our installers can assist with shifting furniture within the room as a courtesy during installation.' 
     },
     { 
       question: 'What guarantees do you provide?', 
@@ -124,7 +147,7 @@ export default function ServiceDetail() {
         <title>{service.name} Chicago | SupplySide Flooring</title>
         <meta 
           name="description" 
-          content={`Professional ${service.name.toLowerCase()} in Chicago. ${service.description} Licensed & insured. Free quotes: ${companyInfo.phone}`} 
+          content={`Professional ${service.name.toLowerCase()}${!service.name.toLowerCase().includes('installation') ? ' installation' : ''} in Chicago. ${service.description} Licensed & insured. Free quotes: ${companyInfo.phone}`} 
         />
       </Helmet>
 
@@ -153,9 +176,10 @@ export default function ServiceDetail() {
             {/* Left Side - Service Content */}
             <div className="bg-deep-charcoal/80 backdrop-blur-sm rounded-2xl p-8">
               <h1 className="text-2xl md:text-3xl font-inter font-bold text-crisp-white mb-6 leading-relaxed">
-                {service.name} Installation<br />
+                {service.name}{!service.name.toLowerCase().includes('installation') && ' Installation'}<br />
                 in Chicago
               </h1>
+              
               <p className="text-lg text-gray-100 mb-8 font-medium leading-relaxed">
                 {service.description}
               </p>
@@ -178,18 +202,18 @@ export default function ServiceDetail() {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href="#service-form"
+                <button
+                  onClick={() => setIsModalOpen(true)}
                   className="bg-burnt-sienna text-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-opacity-90 transition-all duration-300 inline-flex items-center justify-center"
                 >
                   Get Free Estimate
-                </a>
+                </button>
                 <a
                   href={`tel:${companyInfo.phone}`}
-                  className="border-2 border-burnt-sienna text-burnt-sienna px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-burnt-sienna hover:text-crisp-white transition-all duration-300 inline-flex items-center justify-center gap-2"
+                  className="border-2 border-crisp-white text-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-crisp-white hover:text-deep-charcoal transition-all duration-300 inline-flex items-center justify-center gap-2"
                 >
                   <Phone className="w-5 h-5" />
-                  {companyInfo.phone}
+                  Call Now
                 </a>
               </div>
             </div>
@@ -335,7 +359,7 @@ export default function ServiceDetail() {
                   'Free in-home consultation',
                   'Professional measurement',
                   'Material & labor included',
-                  'Furniture moving available',
+                  'Furniture assistance if needed',
                   'Old flooring removal',
                   'Clean-up included'
                 ].map((item, index) => (
@@ -392,6 +416,8 @@ export default function ServiceDetail() {
           </div>
         </div>
       </section>
+      
+      <EstimateModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 }

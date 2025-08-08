@@ -1,23 +1,38 @@
 import { useState } from 'react';
 import { companyInfo } from '../../data/company';
+import { services } from '../../data/services';
+import { submitFormToWebhook } from '../../utils/submitForm';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     phone: '',
-    service: '',
-    message: ''
+    email: '',
+    zipCode: '',
+    serviceType: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // You can integrate with Formspree, EmailJS, or any other service here
-    console.log('Form submitted:', formData);
-    alert('Thank you! We\'ll contact you within 24 hours.');
+    
+    const success = await submitFormToWebhook(formData, 'contact-form');
+    
+    if (success) {
+      alert('Thank you! We\'ll contact you within 24 hours with your free quote.');
+      // Reset form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        zipCode: '',
+        serviceType: ''
+      });
+    } else {
+      alert('There was an error submitting your request. Please try again or call us directly.');
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -47,19 +62,7 @@ export default function ContactForm() {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block mb-2 font-semibold text-crisp-white">Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
+                  placeholder="Your Name"
                 />
               </div>
               
@@ -73,38 +76,54 @@ export default function ContactForm() {
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
+                  placeholder="Phone Number"
                 />
               </div>
               
               <div>
-                <label htmlFor="service" className="block mb-2 font-semibold text-crisp-white">Service Needed</label>
+                <label htmlFor="email" className="block mb-2 font-semibold text-crisp-white">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
+                  placeholder="Email Address"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="zipCode" className="block mb-2 font-semibold text-crisp-white">Zip Code *</label>
+                <input
+                  type="text"
+                  id="zipCode"
+                  name="zipCode"
+                  required
+                  value={formData.zipCode}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
+                  placeholder="Zip Code"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="serviceType" className="block mb-2 font-semibold text-crisp-white">Service Type</label>
                 <select
-                  id="service"
-                  name="service"
-                  value={formData.service}
+                  id="serviceType"
+                  name="serviceType"
+                  value={formData.serviceType}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
                 >
-                  <option value="">Select a service</option>
-                  <option value="vinyl">Luxury Vinyl Flooring</option>
-                  <option value="tile">Tile Installation</option>
-                  <option value="hardwood">Hardwood Flooring</option>
-                  <option value="laminate">Laminate Flooring</option>
-                  <option value="other">Other</option>
+                  <option value="">Select Service Type</option>
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name}
+                    </option>
+                  ))}
                 </select>
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block mb-2 font-semibold text-crisp-white">Project Details</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-burnt-sienna focus:border-transparent font-montserrat"
-                  placeholder="Tell us about your project..."
-                />
               </div>
               
               <button

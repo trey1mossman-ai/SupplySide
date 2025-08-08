@@ -104,8 +104,8 @@ export const serviceFAQs: ServiceFAQs[] = [
         answer: 'Low-pile carpets with tight weaves trap fewer allergens. We also offer hypoallergenic options and treatments to minimize allergen accumulation.'
       },
       {
-        question: 'Do you move furniture for carpet installation?',
-        answer: 'Yes! Our team includes furniture moving in our installation service. We carefully move and replace all furniture to protect your belongings.'
+        question: 'Do I need to move furniture before installation?',
+        answer: 'While we focus on expert flooring installation, we understand that moving heavy furniture can be challenging. As a courtesy, our installers can help shift furniture within the room during installation. For best results and faster installation, we recommend clearing smaller items beforehand.'
       }
     ]
   },

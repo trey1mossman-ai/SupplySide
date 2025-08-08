@@ -1,8 +1,11 @@
-import { Link } from 'react-router-dom';
 import { Phone, Clock, Shield } from 'lucide-react';
 import { companyInfo } from '../../data/company';
 
-export default function CTASection() {
+interface CTASectionProps {
+  onOpenModal?: () => void;
+}
+
+export default function CTASection({ onOpenModal }: CTASectionProps) {
   return (
     <section className="py-12 md:py-16 bg-deep-navy text-crisp-white">
       <div className="container mx-auto px-4">
@@ -15,12 +18,12 @@ export default function CTASection() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link
-              to="/contact"
+            <button
+              onClick={onOpenModal}
               className="inline-flex items-center justify-center bg-burnt-sienna text-crisp-white px-6 py-2.5 rounded-md font-medium text-base hover:bg-terracotta transition-all duration-300"
             >
               Get Free Estimate
-            </Link>
+            </button>
             <a
               href={`tel:${companyInfo.phone}`}
               className="inline-flex items-center justify-center border-2 border-crisp-white text-crisp-white px-6 py-2.5 rounded-md font-medium text-base hover:bg-crisp-white hover:text-deep-charcoal transition-all duration-300"

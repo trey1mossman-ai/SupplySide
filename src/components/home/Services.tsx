@@ -1,7 +1,11 @@
 import { services } from '../../data/services';
 import ServiceCard from '../common/ServiceCard';
 
-export default function Services() {
+interface ServicesProps {
+  onOpenModal?: () => void;
+}
+
+export default function Services({ onOpenModal }: ServicesProps) {
   return (
     <section id="services" className="py-24 md:py-32 bg-light-gray">
       <div className="container mx-auto px-4">
@@ -16,7 +20,7 @@ export default function Services() {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 services-grid">
           {services.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+            <ServiceCard key={service.id} service={service} onOpenModal={onOpenModal} />
           ))}
         </div>
       </div>

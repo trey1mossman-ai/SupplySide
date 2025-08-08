@@ -7,7 +7,7 @@ const faqs = [
   },
   {
     question: 'What makes SupplySide different?',
-    answer: 'Family-owned for over 80 years combined experience, we\'re not a big box store. Matt and Don personally oversee every project. We show up on time, protect your home, and guarantee our work for 5 years.'
+    answer: 'Family-owned and operated for over 80 years combined experience, we\'re not a big box store. Matt and Don personally oversee every project. We show up on time, protect your home, and guarantee our work for 5 years.'
   },
   {
     question: 'How long will my installation take?',
@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     question: 'Do you handle everything?',
-    answer: 'Yes! We move furniture, remove old flooring, handle disposal, and clean up completely. You literally don\'t have to do anything except choose your new floors and let us handle the rest.'
+    answer: 'We\'re flooring installation experts who handle the complete process - from removing old flooring to final cleanup and disposal. As a courtesy, we can help shift furniture within the work area. Our focus is delivering a flawless floor installation from start to finish.'
   },
   {
     question: 'What if I need to reschedule?',
@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     question: 'How do I prepare for installation day?',
-    answer: 'We\'ll provide a simple checklist during your consultation, but honestly, we handle most everything. Just remove small valuables and ensure we have clear pathways. We\'ll take care of the rest.'
+    answer: 'We\'ll provide a simple checklist during your consultation. Just secure small valuables and ensure clear access to work areas. Our expert installers handle all the technical aspects of your flooring installation with precision and care.'
   },
   {
     question: 'What happens after installation?',

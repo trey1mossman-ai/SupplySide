@@ -21,7 +21,7 @@ export default defineConfig({
       ext: '.br',
     })
   ],
-  base: '/',
+  base: './',
   publicDir: 'public',
   build: {
     outDir: 'dist',

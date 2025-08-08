@@ -16,7 +16,7 @@ export default function About() {
               </h3>
               <p className="text-gray-300 mb-6 font-light leading-relaxed">
                 With 80+ years combined experience, Matt and Don have been transforming Chicago homes and businesses 
-                with quality flooring installations. Don brings 48 years as lead installer. As a family-owned business, 
+                with quality flooring installations. Don brings 48 years as lead installer. As a family-owned and operated business, 
                 we treat every project like it's our own home.
               </p>
               <p className="text-gray-300 mb-6 font-light leading-relaxed">
@@ -40,7 +40,7 @@ export default function About() {
             <div className="grid grid-cols-2 gap-8">
               <div className="bg-crisp-white p-8 rounded-xl text-center shadow-sm hover:shadow-md transition-shadow duration-300">
                 <Users className="w-12 h-12 text-burnt-sienna mx-auto mb-3" />
-                <h4 className="font-inter font-medium text-deep-charcoal mb-2">Family Owned</h4>
+                <h4 className="font-inter font-medium text-deep-charcoal mb-2">Family Owned & Operated</h4>
                 <p className="text-medium-gray text-sm">Treating your home like our own</p>
               </div>
               <div className="bg-crisp-white p-8 rounded-xl text-center shadow-sm hover:shadow-md transition-shadow duration-300">

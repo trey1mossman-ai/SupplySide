@@ -3,7 +3,11 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { companyInfo } from '../../data/company';
 import { services } from '../../data/services';
 
-export default function Footer() {
+interface FooterProps {
+  onOpenModal?: () => void;
+}
+
+export default function Footer({ onOpenModal }: FooterProps) {
   return (
     <footer className="bg-deep-charcoal text-crisp-white">
       <div className="container mx-auto px-4 py-12">
@@ -15,10 +19,16 @@ export default function Footer() {
               Chicago's most reliable flooring installation company. 
               80+ years of combined experience.
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-400 mb-4">
               Licensed & Insured<br />
               Family Owned & Operated
             </p>
+            <button
+              onClick={onOpenModal}
+              className="bg-burnt-sienna text-crisp-white px-4 py-2 rounded-md font-medium text-sm hover:bg-terracotta transition-all duration-300"
+            >
+              Get Free Estimate
+            </button>
           </div>
 
           {/* Services */}

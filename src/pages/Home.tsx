@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Hero from '../components/home/Hero';
 import TrustBar from '../components/home/TrustBar';
@@ -8,9 +9,12 @@ import FAQ from '../components/home/FAQ';
 import CTASection from '../components/home/CTASection';
 import ContactForm from '../components/common/ContactForm';
 import GoogleMap from '../components/common/GoogleMap';
+import EstimateModal from '../components/common/EstimateModal';
 import { localBusinessSchema } from '../data/company';
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
       <Helmet>
@@ -27,15 +31,17 @@ export default function Home() {
         </script>
       </Helmet>
 
-      <Hero />
+      <Hero onOpenModal={() => setIsModalOpen(true)} />
       <TrustBar />
       <Testimonials />
-      <CTASection />
-      <Services />
+      <CTASection onOpenModal={() => setIsModalOpen(true)} />
+      <Services onOpenModal={() => setIsModalOpen(true)} />
       <About />
       <FAQ />
       <ContactForm />
       <GoogleMap />
+      
+      <EstimateModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 }

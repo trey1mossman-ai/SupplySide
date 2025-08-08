@@ -2,8 +2,13 @@ import { useState, useEffect } from 'react';
 import { CheckCircle, Clock, Shield } from 'lucide-react';
 import { companyInfo } from '../../data/company';
 import { services } from '../../data/services';
+import { submitFormToWebhook } from '../../utils/submitForm';
 
-export default function Hero() {
+interface HeroProps {
+  onOpenModal?: () => void;
+}
+
+export default function Hero({ onOpenModal }: HeroProps) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -29,10 +34,24 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you! We\'ll contact you within 24 hours with your free quote.');
+    
+    const success = await submitFormToWebhook(formData, 'hero-form');
+    
+    if (success) {
+      alert('Thank you! We\'ll contact you within 24 hours with your free quote.');
+      // Reset form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        zipCode: '',
+        serviceType: ''
+      });
+    } else {
+      alert('There was an error submitting your request. Please try again or call us directly.');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -83,17 +102,17 @@ export default function Hero() {
                 Bonded
               </span>
               <span>•</span>
-              <span>Family Owned</span>
+              <span>Family Owned & Operated</span>
             </div>
             
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 mb-12 hero-cta-group">
-              <a
-                href="#hero-form"
+              <button
+                onClick={onOpenModal}
                 className="bg-burnt-sienna text-crisp-white px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-opacity-90 transition-all duration-300 inline-flex items-center justify-center shadow-lg"
               >
                 Get Free Estimate
-              </a>
+              </button>
               <a
                 href="#services"
                 className="bg-crisp-white/90 backdrop-blur-sm border-2 border-burnt-sienna text-burnt-sienna px-6 py-2.5 rounded-md font-inter font-medium text-base hover:bg-burnt-sienna hover:text-crisp-white transition-all duration-300 inline-flex items-center justify-center shadow-lg"
@@ -115,7 +134,7 @@ export default function Hero() {
                   {rotatingWords.map((word) => (
                     <span
                       key={word}
-                      className="rotating-word text-lg md:text-xl font-bold text-burnt-sienna whitespace-nowrap"
+                      className="rotating-word text-lg md:text-xl font-bold text-crisp-white whitespace-nowrap"
                     >
                       {word}
                     </span>

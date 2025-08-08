@@ -59,7 +59,7 @@ const faqSections = [
     title: "Hardwood Refinishing FAQs",
     faqs: [
       { question: "What's the best season to refinish hardwood floors in Chicago?", answer: "Spring or fall offer stable humidity, minimizing post-refinish gaps." },
-      { question: "Do I need to clear out every piece of furniture?", answer: "Yes—refinishers need a bare floor; we can arrange pods or movers if needed." },
+      { question: "Do I need to clear out every piece of furniture?", answer: "Yes—refinishing equipment requires a completely clear floor. We recommend clearing the room beforehand, though our team can assist with shifting items within the work area as a courtesy." },
       { question: "How long before pets can walk on newly finished floors?", answer: "24 h for water-based polyurethane; 48–72 h for oil-based." },
       { question: "Can you remove deep pet-urine stains?", answer: "Up to 90% via oxalic-acid bleach; severe spots may need board replacement." },
       { question: "What sheen is most popular in Chicago homes?", answer: "Satin—modern look, hides scratches better than semi-gloss." }
