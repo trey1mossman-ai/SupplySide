@@ -13,8 +13,8 @@ export default function About() {
             <div>
               <img 
                 src="/images/about/IMG_0096.webp"
-                alt="SupplySide Flooring entire family team - Multi-generational family-owned Chicago flooring installation company including Matt, Don, and their families dedicated to quality craftsmanship"
-                title="The SupplySide Flooring Family - Three Generations of Chicago's Trusted Flooring Installers"
+                alt="SupplySide Flooring family team - Family-owned Chicago flooring installation company with Matt, Don, and their families dedicated to quality craftsmanship"
+                title="SupplySide Flooring Family - Chicago's Trusted Flooring Installers"
                 loading="lazy"
                 className="w-full rounded-xl shadow-lg mb-8 object-cover"
                 style={{ maxHeight: '400px' }}
@@ -23,9 +23,9 @@ export default function About() {
                 Chicago's Most Reliable Flooring Installers
               </h3>
               <p className="text-gray-300 mb-6 font-light leading-relaxed">
-                With 80+ years combined experience, our entire family team has been transforming Chicago homes and businesses 
-                with quality flooring installations. Don brings 48 years as lead installer, with Matt and the next generation 
-                continuing our legacy. As a multi-generational family-owned business, we treat every project like it's our own home.
+                With 80+ years combined experience, Matt and Don have been transforming Chicago homes and businesses 
+                with quality flooring installations. Don brings 48 years as lead installer. As a family-owned and operated business, 
+                we treat every project like it's our own home.
               </p>
               <p className="text-gray-300 mb-6 font-light leading-relaxed">
                 We've built our reputation on three simple principles: show up on time, do what we say 
@@ -33,9 +33,9 @@ export default function About() {
                 homeowners consistently choose SupplySide for their flooring needs.
               </p>
               <div className="mt-8 p-4 bg-crisp-white/10 rounded-lg border border-crisp-white/20">
-                <p className="text-crisp-white font-medium text-lg">The SupplySide Family</p>
-                <p className="text-gray-300">Three Generations of Master Installers</p>
-                <p className="text-sm text-gray-400 mt-2">Multi-generational family business • Licensed & Insured • Serving Chicago Since 1976</p>
+                <p className="text-crisp-white font-medium text-lg">Matt & Don</p>
+                <p className="text-gray-300">Founders & Master Installers</p>
+                <p className="text-sm text-gray-400 mt-2">Family-owned • Licensed & Insured</p>
               </div>
             </div>
             
