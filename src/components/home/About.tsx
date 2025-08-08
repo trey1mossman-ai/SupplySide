@@ -33,7 +33,7 @@ export default function About() {
                 homeowners consistently choose SupplySide for their flooring needs.
               </p>
               <div className="mt-8 p-4 bg-crisp-white/10 rounded-lg border border-crisp-white/20">
-                <p className="text-crisp-white font-medium text-lg">Matt Mossman</p>
+                <p className="text-crisp-white font-medium text-lg">Matt Lee</p>
                 <p className="text-gray-300">Owner & Operator</p>
                 <p className="text-sm text-gray-400 mt-2">Don - Lead Installer (48 years experience) • Family-owned • Licensed & Insured</p>
               </div>
