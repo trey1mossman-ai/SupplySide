@@ -15,7 +15,7 @@ export const services: Service[] = [
     id: 'vinyl-flooring',
     slug: 'luxury-vinyl-flooring-installation-chicago-il',
     url: '/luxury-vinyl-flooring-installation-chicago-il',
-    name: 'Vinyl Plank & Vinyl Tile',
+    name: 'Plank & Tile Vinyl Installation',
     description: 'Waterproof flooring perfect for Chicago homes. Looks like real wood or stone.',
     features: ['100% Waterproof', 'Pet-Friendly', 'Professional Installation', 'Scratch Resistant'],
     image: '/images/services/vinyl-preview.webp',
